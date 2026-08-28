@@ -23,8 +23,9 @@
     /* Layout & Shadows */
     --border-width: 3px;
     --radius: 0px; /* Brutalism typically uses sharp corners or very slight rounding. Let's stick to sharp 0px */
-    --card-shadow: 6px 6px 0px #000000;
-    --card-shadow-hover: 8px 8px 0px #000000;
+    --shadow-color: #000000;
+    --card-shadow: 6px 6px 0px var(--shadow-color);
+    --card-shadow-hover: 8px 8px 0px var(--shadow-color);
 }
 
 /* ─── Reset ──────────────────────────────────────────────────────────────────── */
@@ -88,6 +89,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 .brand-icon svg { width: 24px; height: 24px; }
 
+#theme-toggle:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--shadow-color) !important;
+}
+
 .greeting h2 {
     font-size: 24px;
     text-transform: uppercase;
@@ -117,7 +123,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
-    box-shadow: 2px 2px 0px #000;
+    box-shadow: 2px 2px 0px var(--shadow-color);
 }
 .live-dot {
     width: 10px;
@@ -141,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     background: var(--surface);
     border: var(--border-width) solid var(--border-color);
-    box-shadow: 4px 4px 0px #000;
+    box-shadow: 4px 4px 0px var(--shadow-color);
 }
 
 .period-tab {
@@ -186,10 +192,10 @@ h1, h2, h3, h4, h5, h6 {
     transition: transform 0.1s, box-shadow 0.1s;
 }
 
-.hero-card:nth-child(1) { background: #FFFFFF; }
-.hero-card:nth-child(2) { background: #F3F4F6; }
-.hero-card:nth-child(3) { background: #E5E7EB; }
-.hero-card:nth-child(4) { background: #D1D5DB; }
+.hero-card:nth-child(1) { background: var(--surface); }
+.hero-card:nth-child(2) { background: var(--gray-100); }
+.hero-card:nth-child(3) { background: var(--gray-200); }
+.hero-card:nth-child(4) { background: var(--gray-300); }
 
 .hero-label {
     font-family: 'IBM Plex Mono', monospace;
@@ -273,7 +279,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     background: var(--surface);
-    box-shadow: 2px 2px 0px #000;
+    box-shadow: 2px 2px 0px var(--shadow-color);
 }
 
 .platform-icon svg {
@@ -356,13 +362,208 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     background: var(--surface);
     color: var(--text-primary);
-    box-shadow: 4px 4px 0px #000;
+    box-shadow: 4px 4px 0px var(--shadow-color);
     transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .btn:active {
     transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px var(--shadow-color);
+}
+
+.btn-danger {
+    background: var(--text-primary);
+    color: var(--surface);
+}
+
+/* ─── Empty State ────────────────────────────────────────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 64px 32px;
+    border: var(--border-width) dashed var(--border-color);
+    background: var(--surface);
+    box-shadow: var(--card-shadow);
+}
+.empty-state h2 {
+    font-size: 32px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+/* ─── Toast ──────────────────────────────────────────────────────────────────── */
+.toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text-primary);
+    color: var(--surface);
+    padding: 16px 24px;
+    border: var(--border-width) solid var(--border-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 1000;
+    line-height: 1;
+    color: var(--text-primary);
+}
+
+.hero-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ─── Main Sections ──────────────────────────────────────────────────────────── */
+.card {
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-color);
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 32px;
+}
+
+.section-header {
+    border-bottom: var(--border-width) solid var(--border-color);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+/* ─── Chart Area ─────────────────────────────────────────────────────────────── */
+.chart-container {
+    height: 280px;
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    border: 2px solid var(--border-color);
+    background: var(--background);
+    padding: 16px 16px 0 16px;
+}
+
+.chart-container svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* ─── Platform Breakdown ─────────────────────────────────────────────────────── */
+.platform-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.platform-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.platform-icon {
+    width: 48px;
+    height: 48px;
+    border: var(--border-width) solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    box-shadow: 2px 2px 0px var(--shadow-color);
+}
+
+.platform-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--text-primary);
+}
+
+.platform-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.platform-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.platform-name {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.platform-stats {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    gap: 16px;
+}
+
+.platform-pct { color: var(--text-secondary); }
+
+.platform-bar-bg {
+    height: 16px;
+    background: var(--gray-100);
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+}
+
+.platform-bar-fill {
+    height: 100%;
+    border-right: 2px solid var(--border-color);
+    background: var(--text-primary);
+}
+
+/* ─── Footer & Data Management ───────────────────────────────────────────────── */
+.app-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-color);
+    box-shadow: var(--card-shadow);
+}
+
+.footer-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.data-management {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: var(--border-width) solid var(--border-color);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text-primary);
+    box-shadow: 4px 4px 0px var(--shadow-color);
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--shadow-color);
 }
 
 .btn-danger {
@@ -401,3 +602,5 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'IBM Plex Mono', monospace;
 }
 .toast.hidden { opacity: 0; pointer-events: none; }
+
+

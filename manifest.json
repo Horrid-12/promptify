@@ -20,7 +20,11 @@
     "https://www.perplexity.ai/*"
   ],
   "background": {
-    "service_worker": "src/background.js"
+    "service_worker": "src/background.js",
+    "scripts": [
+      "src/db.js",
+      "src/background.js"
+    ]
   },
   "content_scripts": [
     {
@@ -34,6 +38,12 @@
       "run_at": "document_idle"
     }
   ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "promptify@example.com",
+      "strict_min_version": "109.0"
+    }
+  },
   "action": {
     "default_popup": "pages/popup/popup.html",
     "default_icon": {
