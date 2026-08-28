@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promptify</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div class="app">
+
+    <!-- ── Header ──────────────────────────────────────────────────────────── -->
+    <header class="header">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="greeting">
+                <h2>Promptify</h2>
+                <p>Your AI usage, quantified.</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── Dashboard Content ───────────────────────────────────────────────── -->
+    <div id="dashboard-content">
+        
+        <div class="controls-row" style="margin-bottom: 24px;">
+            <div class="period-selector">
+                <button class="period-tab active" data-period="daily">DAILY</button>
+                <button class="period-tab" data-period="weekly">WEEKLY</button>
+                <button class="period-tab" data-period="monthly">MONTHLY</button>
+            </div>
+        </div>
+
+        <!-- Hero Cards -->
+        <div class="hero-grid" style="margin-bottom: 32px;">
+            <div class="hero-card">
+                <span class="hero-label" id="card1-label">TOTAL AI TIME</span>
+                <span class="hero-val" id="card1-val">—</span>
+                <span class="hero-sub" id="card1-sub"></span>
+            </div>
+            <div class="hero-card">
+                <span class="hero-label" id="card2-label">SESSIONS</span>
+                <span class="hero-val" id="card2-val">—</span>
+                <span class="hero-sub" id="card2-sub"></span>
+            </div>
+            <div class="hero-card">
+                <span class="hero-label" id="card3-label">AVG. SESSION</span>
+                <span class="hero-val" id="card3-val">—</span>
+                <span class="hero-sub" id="card3-sub"></span>
+            </div>
+            <div class="hero-card">
+                <span class="hero-label" id="card4-label">MOST USED AI</span>
+                <span class="hero-val" id="card4-val" style="font-size:28px; padding-top:4px;">—</span>
+                <span class="hero-sub" id="card4-sub"></span>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <section class="card">
+            <div class="section-header">
+                <h3 class="section-title" id="chart-title">AI USAGE</h3>
+            </div>
+            <div class="chart-container" id="main-chart"></div>
+        </section>
+
+        <!-- Platform Breakdown -->
+        <section class="card">
+            <div class="section-header">
+                <h3 class="section-title">PLATFORM BREAKDOWN</h3>
+            </div>
+            <div class="platform-list" id="platform-breakdown">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+        
+    </div> <!-- /dashboard-content -->
+
+    <!-- ── Footer & Data Management ────────────────────────────────────────── -->
+    <footer class="app-footer">
+        <div class="footer-note">ALL DATA STORED LOCALLY</div>
+        <div class="data-management">
+            <button id="btn-export" class="btn">Export</button>
+            <label class="btn" style="cursor:pointer;">
+                Import
+                <input type="file" id="import-file-input" accept=".json" style="display:none">
+            </label>
+            <button id="btn-delete" class="btn btn-danger">Delete All</button>
+        </div>
+    </footer>
+
+</div> <!-- /app -->
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="../../src/db.js"></script>
+<script src="../../src/analytics.js"></script>
+<script src="dashboard.js"></script>
+
+</body>
+</html>

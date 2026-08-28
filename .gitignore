@@ -1,0 +1,43 @@
+# AI Time Tracker — Git Ignore
+
+# ── SQLite (legacy / future) ──────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# ── Python (legacy server) ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# ── Node ─────────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.yarn/
+
+# ── OS Artefacts ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Chrome extension build artefacts ─────────────────────────────────────────
+*.crx
+*.pem
+*.zip
