@@ -20,15 +20,12 @@ function updateHeaderStatus(active, isInactive) {
 
     if (active && !isInactive) {
         statusTextEl.textContent = 'Tracking';
-        statusTextEl.style.color = '#10b981';
         indicatorEl.classList.add('pulse-active');
     } else if (active && isInactive) {
         statusTextEl.textContent = 'Inactive';
-        statusTextEl.style.color = '#f59e0b';
         indicatorEl.classList.add('pulse-idle');
     } else {
         statusTextEl.textContent = 'Idle';
-        statusTextEl.style.color = '#94a3b8';
     }
 }
 

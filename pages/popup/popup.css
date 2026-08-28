@@ -1,23 +1,28 @@
+/* ═══════════════════════════════════════════════════════════════
+   popup.css — AI Time Tracker Extension Popup
+   Grayscale Neo-Brutalist Theme
+═══════════════════════════════════════════════════════════════ */
+
 :root {
-    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-    --card-bg: rgba(30, 41, 59, 0.65);
-    --border-color: rgba(255, 255, 255, 0.08);
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
+    /* Base */
+    --background: #F4F4F0;
+    --surface: #FFFFFF;
+    --text-primary: #000000;
+    --text-secondary: #555555;
+    --border-color: #000000;
 
-    --accent-color: #6366f1;
-    --indicator-green: #10b981;
-    --indicator-amber: #f59e0b;
-    --indicator-gray: #64748b;
+    /* Grayscale Accents */
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-800: #1F2937;
 
-    /* Per-platform progress bar colours */
-    --chatgpt-color: #10b981;
-    --claude-color:  #f59e0b;
-    --gemini-color:  #3b82f6;
-    --perplexity-color: #8b5cf6;
+    /* Layout & Shadows */
+    --border-width: 3px;
+    --card-shadow: 4px 4px 0px #000000;
 }
 
-* {
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -25,20 +30,18 @@
 
 body {
     width: 360px;
-    font-family: 'Outfit', sans-serif;
-    background: var(--bg-gradient);
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    background: var(--background);
     color: var(--text-primary);
     padding: 16px;
-    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
 .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 20px 16px 16px 16px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.4);
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-color);
+    padding: 20px;
+    box-shadow: var(--card-shadow);
 }
 
 header {
@@ -46,6 +49,8 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: var(--border-width) solid var(--border-color);
 }
 
 .logo-area {
@@ -55,54 +60,43 @@ header {
 }
 
 h1 {
+    font-family: 'Archivo Black', sans-serif;
     font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
 }
 
 .status-badge {
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-secondary);
-    padding: 2px 10px;
-    border-radius: 99px;
-    font-weight: 500;
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
+    background: var(--gray-100);
+    color: var(--text-primary);
+    padding: 4px 10px;
+    font-weight: 600;
+    border: 2px solid var(--border-color);
+    text-transform: uppercase;
+    box-shadow: 2px 2px 0px #000;
 }
 
-/* ─── Pulse Indicator ────────────────────────────────────────────────────────── */
+/* ─── Pulse Indicator -> Live Dot ────────────────────────────────────────────── */
 
 .pulse-indicator {
-    width: 8px;
-    height: 8px;
-    background-color: var(--indicator-gray);
+    width: 10px;
+    height: 10px;
+    background-color: var(--gray-300);
     border-radius: 50%;
+    border: 1px solid var(--border-color);
     display: inline-block;
-    box-shadow: 0 0 0 0 rgba(100, 116, 139, 0.4);
-    transition: all 0.3s ease;
 }
 
 .pulse-active {
-    background-color: var(--indicator-green);
-    animation: pulse-green 2s infinite;
+    background-color: var(--gray-800);
+    animation: none; /* Removed pulse animation for brutalist theme */
 }
 
 .pulse-idle {
-    background-color: var(--indicator-amber);
-    animation: pulse-amber 2s infinite;
-}
-
-@keyframes pulse-green {
-    0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-    70%  { transform: scale(1);    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-@keyframes pulse-amber {
-    0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-    70%  { transform: scale(1);    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    background-color: var(--gray-300);
+    animation: none;
 }
 
 /* ─── Hero Stats ─────────────────────────────────────────────────────────────── */
@@ -110,23 +104,29 @@ h1 {
 .hero-stats {
     text-align: center;
     margin-bottom: 24px;
+    padding: 16px;
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-color);
+    box-shadow: var(--card-shadow);
 }
 
 .time-label {
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     font-weight: 600;
     color: var(--text-secondary);
-    letter-spacing: 1.5px;
+    text-transform: uppercase;
     margin-bottom: 4px;
 }
 
 #total-time-today {
+    font-family: 'Archivo Black', sans-serif;
     font-size: 40px;
-    font-weight: 700;
-    letter-spacing: -1px;
-    background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: 400; /* Archivo Black is naturally bold */
+    line-height: 1;
+    color: var(--text-primary);
+    background: none;
+    -webkit-text-fill-color: var(--text-primary);
 }
 
 /* ─── Platform List ──────────────────────────────────────────────────────────── */
@@ -134,77 +134,79 @@ h1 {
 .platforms-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-bottom: 20px;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
 .platform-row {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .platform-meta {
     display: flex;
     justify-content: space-between;
-    font-size: 13px;
-    font-weight: 500;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
-.platform-name { color: #e2e8f0; }
-.platform-time { color: var(--text-primary); font-weight: 600; }
+.platform-name { color: var(--text-primary); }
+.platform-time { 
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-primary); 
+    font-weight: 600; 
+}
 
 .progress-bar-bg {
-    height: 5px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 99px;
-    overflow: hidden;
+    height: 12px;
+    background: var(--gray-100);
+    border: 2px solid var(--border-color);
 }
 
 .progress-bar-fill {
     height: 100%;
-    border-radius: 99px;
+    background: var(--text-primary);
+    border-right: 2px solid var(--border-color);
     width: 0%;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.3s ease;
 }
-
-.progress-bar-fill.chatgpt    { background: linear-gradient(90deg, #059669, #10b981); }
-.progress-bar-fill.claude     { background: linear-gradient(90deg, #d97706, #f59e0b); }
-.progress-bar-fill.gemini     { background: linear-gradient(90deg, #2563eb, #3b82f6); }
-.progress-bar-fill.perplexity { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
 
 /* ─── Metrics Grid ───────────────────────────────────────────────────────────── */
 
 .metrics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    border-top: 1px solid var(--border-color);
+    gap: 12px;
     padding-top: 16px;
-    margin-bottom: 16px;
+    border-top: var(--border-width) solid var(--border-color);
+    margin-bottom: 20px;
 }
 
 .metric-card {
-    background: rgba(15, 23, 42, 0.3);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 10px;
+    background: var(--gray-100);
+    border: var(--border-width) solid var(--border-color);
+    padding: 12px;
     text-align: center;
+    box-shadow: 2px 2px 0px #000;
 }
 
 .metric-val {
     display: block;
-    font-size: 18px;
-    font-weight: 700;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 20px;
     color: var(--text-primary);
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .metric-label {
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
     color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
 /* ─── Dashboard Button ───────────────────────────────────────────────────────── */
@@ -214,43 +216,41 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(129, 140, 248, 0.15) 100%);
-    border: 1px solid rgba(99, 102, 241, 0.35);
-    border-radius: 10px;
-    color: #a5b4fc;
-    font-family: 'Outfit', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: var(--border-width) solid var(--border-color);
+    color: var(--text-primary);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s ease;
-    margin-bottom: 12px;
-    letter-spacing: 0.1px;
+    box-shadow: 4px 4px 0px #000;
+    transition: transform 0.1s, box-shadow 0.1s;
+    margin-bottom: 16px;
 }
 
-.dashboard-btn:hover {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.35) 0%, rgba(129, 140, 248, 0.25) 100%);
-    border-color: rgba(99, 102, 241, 0.6);
-    color: #c7d2fe;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+.dashboard-btn svg {
+    color: var(--text-primary);
 }
 
 .dashboard-btn:active {
-    transform: translateY(0);
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #000;
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────────────────── */
 
 footer {
-    border-top: 1px solid var(--border-color);
-    padding-top: 12px;
+    border-top: var(--border-width) solid var(--border-color);
+    padding-top: 16px;
 }
 
 .footer-version {
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
-    color: rgba(148, 163, 184, 0.5);
+    color: var(--text-secondary);
     text-align: center;
 }
 
