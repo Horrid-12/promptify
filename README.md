@@ -98,3 +98,12 @@ Promptify/
 - No external requests are made.
 
 All session durations are stored locally in your browser's IndexedDB. You can export or delete your data at any time from the dashboard footer.
+
+## Screenshots
+
+<img width="1850" height="916" alt="1" src="https://github.com/user-attachments/assets/829686d2-4f68-42c7-bf55-9b0a37cd2592" />
+<img width="1852" height="921" alt="2" src="https://github.com/user-attachments/assets/f7b83bbc-3ebc-4c2c-b4b4-35a9fee65399" />
+<img width="auto" height="500" alt="3" src="https://github.com/user-attachments/assets/0532e0f0-fb29-4269-bf1c-a9cd931eaac9" />
+
+
+
