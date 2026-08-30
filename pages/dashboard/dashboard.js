@@ -212,6 +212,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('[AI Tracker] DB init failed:', err);
     }
 
+
+
     // Tabs
     document.querySelectorAll('.period-tab').forEach(btn => {
         btn.addEventListener('click', (e) => {

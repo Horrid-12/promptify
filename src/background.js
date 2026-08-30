@@ -4,7 +4,9 @@
  * Persists completed sessions to IndexedDB via db.js.
  */
 
-importScripts('db.js');
+if (typeof importScripts === 'function') {
+    importScripts('db.js');
+}
 
 // ─── Platform Registry ────────────────────────────────────────────────────────
 
