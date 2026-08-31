@@ -12,7 +12,8 @@
  * All statistics functions return Promises.
  */
 
-const SUPPORTED_PLATFORMS = ['ChatGPT', 'Claude', 'Gemini', 'Perplexity'];
+// Dynamic platform list from central registry (platforms.js must be loaded first)
+var SUPPORTED_PLATFORMS = (typeof getAllPlatformIds === 'function') ? getAllPlatformIds() : ['ChatGPT', 'Claude', 'Gemini', 'Perplexity'];
 
 // Must match background.js
 const INACTIVITY_TIMEOUT_MS = 300000; // 5 minutes
@@ -146,8 +147,9 @@ async function getDailyStats(daysAgo = 0, activeSession = null) {
     let completedMs = 0;
     sessions.forEach(s => {
         completedMs += s.duration;
-        if (Object.prototype.hasOwnProperty.call(byPlatform, s.site)) {
-            byPlatform[s.site] += s.duration;
+        var siteId = (typeof normalizeSiteId === 'function') ? normalizeSiteId(s.site) : s.site;
+        if (Object.prototype.hasOwnProperty.call(byPlatform, siteId)) {
+            byPlatform[siteId] += s.duration;
         }
     });
 
@@ -155,8 +157,9 @@ async function getDailyStats(daysAgo = 0, activeSession = null) {
     let activeMs = 0;
     if (daysAgo === 0 && activeSession && getLocalDateString(activeSession.startTime) === targetDateStr) {
         activeMs = getActiveSessionElapsedMs(activeSession);
-        if (Object.prototype.hasOwnProperty.call(byPlatform, activeSession.site)) {
-            byPlatform[activeSession.site] += activeMs;
+        var activeSiteId = (typeof normalizeSiteId === 'function') ? normalizeSiteId(activeSession.site) : activeSession.site;
+        if (Object.prototype.hasOwnProperty.call(byPlatform, activeSiteId)) {
+            byPlatform[activeSiteId] += activeMs;
         }
     }
 
@@ -207,11 +210,12 @@ async function getWeeklyStats(weeksAgo = 0) {
 
     sessions.forEach(s => {
         const d = getLocalDateString(s.startTime);
+        var siteId = (typeof normalizeSiteId === 'function') ? normalizeSiteId(s.site) : s.site;
         if (Object.prototype.hasOwnProperty.call(dailyMap, d)) {
             dailyMap[d] += s.duration;
         }
-        if (Object.prototype.hasOwnProperty.call(byPlatform, s.site)) {
-            byPlatform[s.site] += s.duration;
+        if (Object.prototype.hasOwnProperty.call(byPlatform, siteId)) {
+            byPlatform[siteId] += s.duration;
         }
     });
 
@@ -238,7 +242,10 @@ async function getPlatformStats() {
     const totalMs = all.reduce((acc, s) => acc + s.duration, 0);
 
     return SUPPORTED_PLATFORMS.map(platform => {
-        const platSessions = all.filter(s => s.site === platform);
+        const platSessions = all.filter(s => {
+            var siteId = (typeof normalizeSiteId === 'function') ? normalizeSiteId(s.site) : s.site;
+            return siteId === platform;
+        });
         const platMs       = platSessions.reduce((acc, s) => acc + s.duration, 0);
         return {
             site:         platform,
@@ -289,11 +296,12 @@ async function getMonthlyStatsForMonth(monthsAgo = 0) {
 
     sessions.forEach(s => {
         const d = getLocalDateString(s.startTime);
+        var siteId = (typeof normalizeSiteId === 'function') ? normalizeSiteId(s.site) : s.site;
         if (Object.prototype.hasOwnProperty.call(dailyMap, d)) {
             dailyMap[d] += s.duration;
         }
-        if (Object.prototype.hasOwnProperty.call(byPlatform, s.site)) {
-            byPlatform[s.site] += s.duration;
+        if (Object.prototype.hasOwnProperty.call(byPlatform, siteId)) {
+            byPlatform[siteId] += s.duration;
         }
     });
 
@@ -364,4 +372,56 @@ async function getSessionStats() {
         avg:      durations.reduce((a, b) => a + b, 0) / durations.length,
         total:    all.length
     };
+}
+
+// ─── Nested Platform Stats ────────────────────────────────────────────────────
+
+/**
+ * Returns platform stats grouped with parent/sub-platform nesting.
+ * For each top-level platform that has sub-platforms, includes a
+ * `children` array with the sub-platform breakdown.
+ */
+async function getNestedPlatformStats() {
+    const all = await getAllSessions();
+    const totalMs = all.reduce((acc, s) => acc + s.duration, 0);
+    const topLevelIds = (typeof getTopLevelPlatformIds === 'function')
+        ? getTopLevelPlatformIds()
+        : SUPPORTED_PLATFORMS;
+
+    const result = topLevelIds.map(function(platformId) {
+        const platSessions = all.filter(s => s.site === platformId);
+        const platMs = platSessions.reduce((acc, s) => acc + s.duration, 0);
+
+        var entry = {
+            id:           platformId,
+            name:         (typeof getPlatformName === 'function') ? getPlatformName(platformId) : platformId,
+            icon:         (typeof getPlatformIcon === 'function') ? getPlatformIcon(platformId) : '',
+            totalMs:      platMs,
+            sessionCount: platSessions.length,
+            avgMs:        platSessions.length > 0 ? platMs / platSessions.length : 0,
+            percent:      totalMs > 0 ? Math.round((platMs / totalMs) * 100) : 0,
+            children:     []
+        };
+
+        var subIds = (typeof getSubPlatformIds === 'function') ? getSubPlatformIds(platformId) : [];
+        subIds.forEach(function(subId) {
+            var subSessions = all.filter(s => s.site === subId);
+            var subMs = subSessions.reduce((acc, s) => acc + s.duration, 0);
+            if (subMs > 0) {
+                entry.children.push({
+                    id:           subId,
+                    name:         (typeof getPlatformName === 'function') ? getPlatformName(subId) : subId,
+                    icon:         (typeof getPlatformIcon === 'function') ? getPlatformIcon(subId) : '',
+                    totalMs:      subMs,
+                    sessionCount: subSessions.length,
+                    avgMs:        subSessions.length > 0 ? subMs / subSessions.length : 0,
+                    percent:      totalMs > 0 ? Math.round((subMs / totalMs) * 100) : 0
+                });
+            }
+        });
+
+        return entry;
+    });
+
+    return result;
 }

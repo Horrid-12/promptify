@@ -22,7 +22,7 @@
 
     /* Layout & Shadows */
     --border-width: 3px;
-    --radius: 0px; /* Brutalism typically uses sharp corners or very slight rounding. Let's stick to sharp 0px */
+    --radius: 0px;
     --shadow-color: #000000;
     --card-shadow: 6px 6px 0px var(--shadow-color);
     --card-shadow-hover: 8px 8px 0px var(--shadow-color);
@@ -51,10 +51,10 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
-/* ─── App Layout (Single Column) ─────────────────────────────────────────────── */
+/* ─── App Layout ─────────────────────────────────────────────────────────────── */
 .app {
     width: 100%;
-    max-width: 900px; /* Constrain width for a focused single-column layout */
+    max-width: 900px;
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -89,11 +89,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 .brand-icon svg { width: 24px; height: 24px; }
 
-#theme-toggle:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px var(--shadow-color) !important;
-}
-
 .greeting h2 {
     font-size: 24px;
     text-transform: uppercase;
@@ -103,37 +98,6 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
     color: var(--text-secondary);
-}
-
-.header-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-}
-
-.live-indicator {
-    padding: 8px 16px;
-    background: var(--gray-100);
-    border: 2px solid var(--border-color);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    box-shadow: 2px 2px 0px var(--shadow-color);
-}
-.live-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--gray-300);
-    border: 1px solid var(--border-color);
-}
-.live-dot.active {
-    background: var(--gray-800);
 }
 
 /* ─── Period Selector ────────────────────────────────────────────────────────── */
@@ -162,10 +126,7 @@ h1, h2, h3, h4, h5, h6 {
     border-right: var(--border-width) solid var(--border-color);
     text-transform: uppercase;
 }
-.period-tab:last-child {
-    border-right: none;
-}
-
+.period-tab:last-child { border-right: none; }
 .period-tab.active {
     background: var(--text-primary);
     color: var(--surface);
@@ -189,7 +150,6 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .hero-card:nth-child(1) { background: var(--surface); }
@@ -262,13 +222,18 @@ h1, h2, h3, h4, h5, h6 {
 .platform-list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
+}
+
+.platform-entry {
+    display: flex;
+    flex-direction: column;
 }
 
 .platform-row {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
 }
 
 .platform-icon {
@@ -280,12 +245,36 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
     background: var(--surface);
     box-shadow: 2px 2px 0px var(--shadow-color);
+    flex-shrink: 0;
 }
 
-.platform-icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--text-primary);
+.platform-icon img {
+    width: 28px;
+    height: 28px;
+}
+
+.platform-icon-lg {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    color: var(--surface);
+    background: var(--text-primary);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.platform-icon-md {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 14px;
+    color: var(--surface);
+    background: var(--gray-800);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .platform-info {
@@ -305,6 +294,20 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Archivo Black', sans-serif;
     font-size: 18px;
     text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.platform-chevron {
+    font-size: 10px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    user-select: none;
+    transition: color 0.15s;
+}
+.platform-chevron:hover {
+    color: var(--text-primary);
 }
 
 .platform-stats {
@@ -328,6 +331,39 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
     border-right: 2px solid var(--border-color);
     background: var(--text-primary);
+}
+
+/* ─── Sub-Platform Nesting ───────────────────────────────────────────────────── */
+.platform-sub-list {
+    margin-left: 64px;
+    margin-top: 8px;
+    padding-left: 16px;
+    border-left: 2px solid var(--gray-300);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.platform-row-sub {
+    gap: 12px;
+}
+
+.platform-row-sub .platform-icon {
+    width: 36px;
+    height: 36px;
+}
+
+.platform-row-sub .platform-name {
+    font-size: 14px;
+}
+
+.platform-row-sub .platform-bar-bg {
+    height: 10px;
+}
+
+.platform-row-sub .platform-stats {
+    font-size: 12px;
+    gap: 12px;
 }
 
 /* ─── Footer & Data Management ───────────────────────────────────────────────── */
@@ -374,215 +410,6 @@ h1, h2, h3, h4, h5, h6 {
 .btn-danger {
     background: var(--text-primary);
     color: var(--surface);
-}
-
-/* ─── Empty State ────────────────────────────────────────────────────────────── */
-.empty-state {
-    text-align: center;
-    padding: 64px 32px;
-    border: var(--border-width) dashed var(--border-color);
-    background: var(--surface);
-    box-shadow: var(--card-shadow);
-}
-.empty-state h2 {
-    font-size: 32px;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-}
-
-/* ─── Toast ──────────────────────────────────────────────────────────────────── */
-.toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--text-primary);
-    color: var(--surface);
-    padding: 16px 24px;
-    border: var(--border-width) solid var(--border-color);
-    font-weight: 700;
-    text-transform: uppercase;
-    z-index: 1000;
-    line-height: 1;
-    color: var(--text-primary);
-}
-
-.hero-sub {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-/* ─── Main Sections ──────────────────────────────────────────────────────────── */
-.card {
-    background: var(--surface);
-    border: var(--border-width) solid var(--border-color);
-    padding: 32px;
-    box-shadow: var(--card-shadow);
-    margin-bottom: 32px;
-}
-
-.section-header {
-    border-bottom: var(--border-width) solid var(--border-color);
-    padding-bottom: 16px;
-    margin-bottom: 24px;
-}
-
-.section-title {
-    font-size: 20px;
-    font-family: 'Archivo Black', sans-serif;
-    text-transform: uppercase;
-    color: var(--text-primary);
-    letter-spacing: -0.5px;
-}
-
-/* ─── Chart Area ─────────────────────────────────────────────────────────────── */
-.chart-container {
-    height: 280px;
-    display: flex;
-    align-items: flex-end;
-    width: 100%;
-    border: 2px solid var(--border-color);
-    background: var(--background);
-    padding: 16px 16px 0 16px;
-}
-
-.chart-container svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-}
-
-/* ─── Platform Breakdown ─────────────────────────────────────────────────────── */
-.platform-list {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.platform-row {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.platform-icon {
-    width: 48px;
-    height: 48px;
-    border: var(--border-width) solid var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--surface);
-    box-shadow: 2px 2px 0px var(--shadow-color);
-}
-
-.platform-icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--text-primary);
-}
-
-.platform-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.platform-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-}
-
-.platform-name {
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 18px;
-    text-transform: uppercase;
-}
-
-.platform-stats {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    gap: 16px;
-}
-
-.platform-pct { color: var(--text-secondary); }
-
-.platform-bar-bg {
-    height: 16px;
-    background: var(--gray-100);
-    border: 2px solid var(--border-color);
-    overflow: hidden;
-}
-
-.platform-bar-fill {
-    height: 100%;
-    border-right: 2px solid var(--border-color);
-    background: var(--text-primary);
-}
-
-/* ─── Footer & Data Management ───────────────────────────────────────────────── */
-.app-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px;
-    background: var(--surface);
-    border: var(--border-width) solid var(--border-color);
-    box-shadow: var(--card-shadow);
-}
-
-.footer-note {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.data-management {
-    display: flex;
-    gap: 12px;
-}
-
-.btn {
-    padding: 10px 20px;
-    border: var(--border-width) solid var(--border-color);
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    text-transform: uppercase;
-    cursor: pointer;
-    background: var(--surface);
-    color: var(--text-primary);
-    box-shadow: 4px 4px 0px var(--shadow-color);
-    transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.btn:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px var(--shadow-color);
-}
-
-.btn-danger {
-    background: var(--text-primary);
-    color: var(--surface);
-}
-
-/* ─── Empty State ────────────────────────────────────────────────────────────── */
-.empty-state {
-    text-align: center;
-    padding: 64px 32px;
-    border: var(--border-width) dashed var(--border-color);
-    background: var(--surface);
-    box-shadow: var(--card-shadow);
-}
-.empty-state h2 {
-    font-size: 32px;
-    margin-bottom: 16px;
-    text-transform: uppercase;
 }
 
 /* ─── Toast ──────────────────────────────────────────────────────────────────── */
@@ -600,7 +427,6 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 1000;
     transition: opacity 0.3s;
     font-family: 'IBM Plex Mono', monospace;
+    line-height: 1;
 }
 .toast.hidden { opacity: 0; pointer-events: none; }
-
-
