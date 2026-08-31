@@ -5,25 +5,12 @@
  */
 
 if (typeof importScripts === 'function') {
-    importScripts('db.js');
+    importScripts('platforms.js', 'db.js');
 }
 
-// ─── Platform Registry ────────────────────────────────────────────────────────
-
-const AI_SITES = {
-    'chatgpt.com':        'ChatGPT',
-    'claude.ai':          'Claude',
-    'gemini.google.com':  'Gemini',
-    'perplexity.ai':      'Perplexity'
-};
-
-// Reverse map: site name → canonical domain
-const AI_SITE_DOMAINS = {
-    'ChatGPT':    'chatgpt.com',
-    'Claude':     'claude.ai',
-    'Gemini':     'gemini.google.com',
-    'Perplexity': 'perplexity.ai'
-};
+// ─── Platform Lookup ──────────────────────────────────────────────────────────
+// platforms.js provides: lookupPlatform(), getPlatformName(), getPlatformIcon(),
+// getAllPlatformIds(), getSubPlatformIds(), getParentPlatformId(), etc.
 
 // Inactivity threshold: 5 minutes
 const INACTIVITY_TIMEOUT_MS = 300000;
@@ -84,7 +71,7 @@ function runMigrationIfNeeded() {
             const record = {
                 id:        s.id || crypto.randomUUID(),
                 site:      s.site,
-                domain:    AI_SITE_DOMAINS[s.site] || s.site.toLowerCase() + '.com',
+                domain:    getPlatformName(s.site) || s.site,
                 startTime: s.startTime,
                 endTime:   s.endTime,
                 duration:  s.duration,
@@ -151,19 +138,12 @@ function formatDurationLog(ms) {
 }
 
 /**
- * Normalizes a URL and returns the AI platform name, or null if unsupported.
+ * Normalizes a URL and returns the AI platform ID, or null if unsupported.
+ * Uses the central registry from platforms.js.
  */
 function getAiSiteName(urlString) {
-    if (!urlString) return null;
-    try {
-        const { hostname } = new URL(urlString);
-        for (const [domain, name] of Object.entries(AI_SITES)) {
-            if (hostname === domain || hostname.endsWith('.' + domain)) {
-                return name;
-            }
-        }
-    } catch (_) { /* invalid URL */ }
-    return null;
+    var result = lookupPlatform(urlString);
+    return result ? result.id : null;
 }
 
 // ─── Active Session State Persistence ────────────────────────────────────────
@@ -205,7 +185,7 @@ function endCurrentSession(now) {
         const sessionRecord = {
             id:        activeSession.id,
             site:      activeSession.site,
-            domain:    AI_SITE_DOMAINS[activeSession.site] || activeSession.site,
+            domain:    getPlatformName(activeSession.site) || activeSession.site,
             startTime: activeSession.startTime,
             endTime:   endTime,
             duration:  duration,

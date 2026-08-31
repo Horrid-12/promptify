@@ -41,3 +41,10 @@ desktop.ini
 *.crx
 *.pem
 *.zip
+
+# ── Local dev profile (Chrome launcher) ─────────────────────────────────────
+.dev-profile/
+.dev-profile-floorp/
+
+# ── Secrets ──────────────────────────────────────────────────────────────────
+.amo-keys.json

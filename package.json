@@ -1,0 +1,17 @@
+{
+  "name": "promptify",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Local dev tooling for the Promptify AI time-tracker extension.",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "npm run build && web-ext run --source-dir dist/firefox --firefox-profile-create-if-missing --keep-profile-changes --no-config-discovery --no-input",
+    "dev:floorp": "npm run build && node scripts/launch-floorp.js",
+    "dev:watch": "node build.js --watch",
+    "dev:chrome": "npm run build && node scripts/launch-chrome.js",
+    "sign": "npm run build && node scripts/sign.js"
+  },
+  "devDependencies": {
+    "web-ext": "^8.2.0"
+  }
+}
