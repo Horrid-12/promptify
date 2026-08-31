@@ -1,6 +1,6 @@
 /**
  * dashboard.js
- * Grayscale Neo-Brutalist Analytics dashboard for AI Time Tracker.
+ * Grayscale Analytics Dashboard for AI Tracker Chromium and Gecko Extension.
  */
 
 let _refreshTimer = null;
