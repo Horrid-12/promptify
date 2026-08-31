@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Promptify",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Your AI usage, quantified. All data stored locally — no server required.",
   "icons": {
     "16":  "assets/icons/icon16.png",
@@ -17,11 +17,33 @@
     "https://chatgpt.com/*",
     "https://claude.ai/*",
     "https://gemini.google.com/*",
-    "https://www.perplexity.ai/*"
+    "https://www.perplexity.ai/*",
+    "https://chat.qwen.ai/*",
+    "https://qianwen.com/*",
+    "https://www.qianwen.com/*",
+    "https://chat.deepseek.com/*",
+    "https://deepseek.com/*",
+    "https://kimi.ai/*",
+    "https://www.kimi.ai/*",
+    "https://kimi.moonshot.cn/*",
+    "https://www.kimi.moonshot.cn/*",
+    "https://kimi.com/*",
+    "https://www.kimi.com/*",
+    "https://copilot.microsoft.com/*",
+    "https://copilot.cloud.microsoft/*",
+    "https://m365copilot.com/*",
+    "https://m365.cloud.microsoft/*",
+    "https://grok.com/*",
+    "https://www.grok.com/*",
+    "https://labs.google/*",
+    "https://flow.google/*",
+    "https://notebooklm.google.com/*",
+    "https://aistudio.google.com/*"
   ],
   "background": {
     "service_worker": "src/background.js",
     "scripts": [
+      "src/platforms.js",
       "src/db.js",
       "src/background.js"
     ]
@@ -32,7 +54,28 @@
         "https://chatgpt.com/*",
         "https://claude.ai/*",
         "https://gemini.google.com/*",
-        "https://www.perplexity.ai/*"
+        "https://www.perplexity.ai/*",
+        "https://chat.qwen.ai/*",
+        "https://qianwen.com/*",
+        "https://www.qianwen.com/*",
+        "https://chat.deepseek.com/*",
+        "https://deepseek.com/*",
+        "https://kimi.ai/*",
+        "https://www.kimi.ai/*",
+        "https://kimi.moonshot.cn/*",
+        "https://www.kimi.moonshot.cn/*",
+        "https://kimi.com/*",
+        "https://www.kimi.com/*",
+        "https://copilot.microsoft.com/*",
+        "https://copilot.cloud.microsoft/*",
+        "https://m365copilot.com/*",
+        "https://m365.cloud.microsoft/*",
+        "https://grok.com/*",
+        "https://www.grok.com/*",
+        "https://labs.google/*",
+        "https://flow.google/*",
+        "https://notebooklm.google.com/*",
+        "https://aistudio.google.com/*"
       ],
       "js": ["src/content.js"],
       "run_at": "document_idle"
