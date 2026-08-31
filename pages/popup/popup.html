@@ -28,43 +28,8 @@
             </div>
 
             <!-- Platform List Breakdown -->
-            <div class="platforms-list">
-                <div class="platform-row" data-platform="ChatGPT">
-                    <div class="platform-meta">
-                        <span class="platform-name">ChatGPT</span>
-                        <span class="platform-time" id="time-chatgpt">0m</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill chatgpt" id="bar-chatgpt" style="width: 0%;"></div>
-                    </div>
-                </div>
-                <div class="platform-row" data-platform="Claude">
-                    <div class="platform-meta">
-                        <span class="platform-name">Claude</span>
-                        <span class="platform-time" id="time-claude">0m</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill claude" id="bar-claude" style="width: 0%;"></div>
-                    </div>
-                </div>
-                <div class="platform-row" data-platform="Gemini">
-                    <div class="platform-meta">
-                        <span class="platform-name">Gemini</span>
-                        <span class="platform-time" id="time-gemini">0m</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill gemini" id="bar-gemini" style="width: 0%;"></div>
-                    </div>
-                </div>
-                <div class="platform-row" data-platform="Perplexity">
-                    <div class="platform-meta">
-                        <span class="platform-name">Perplexity</span>
-                        <span class="platform-time" id="time-perplexity">0m</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill perplexity" id="bar-perplexity" style="width: 0%;"></div>
-                    </div>
-                </div>
+            <div class="platforms-list" id="platforms-container">
+                <!-- Dynamically populated by popup.js -->
             </div>
 
             <!-- Footer Summary Cards -->
@@ -88,6 +53,7 @@
             <p class="footer-version">Active Time Tracking Engine v2.0.0</p>
         </footer>
     </div>
+    <script src="../../src/platforms.js"></script>
     <script src="../../src/db.js"></script>
     <script src="../../src/analytics.js"></script>
     <script src="popup.js"></script>
