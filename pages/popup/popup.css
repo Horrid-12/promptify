@@ -20,6 +20,8 @@
     /* Layout & Shadows */
     --border-width: 3px;
     --card-shadow: 4px 4px 0px #000000;
+    --shadow-color: #000000;
+    --card-shadow: 4px 4px 0px var(--shadow-color);
 }
 
 *, *::before, *::after {
@@ -76,6 +78,7 @@ h1 {
     border: 2px solid var(--border-color);
     text-transform: uppercase;
     box-shadow: 2px 2px 0px #000;
+    box-shadow: 2px 2px 0px var(--shadow-color);
 }
 
 /* ─── Pulse Indicator -> Live Dot ────────────────────────────────────────────── */
@@ -252,6 +255,7 @@ h1 {
     padding: 12px;
     text-align: center;
     box-shadow: 2px 2px 0px #000;
+    box-shadow: 2px 2px 0px var(--shadow-color);
 }
 
 .metric-val {
@@ -288,6 +292,7 @@ h1 {
     text-transform: uppercase;
     cursor: pointer;
     box-shadow: 4px 4px 0px #000;
+    box-shadow: 4px 4px 0px var(--shadow-color);
     transition: transform 0.1s, box-shadow 0.1s;
     margin-bottom: 16px;
 }
@@ -299,6 +304,7 @@ h1 {
 .dashboard-btn:active {
     transform: translate(4px, 4px);
     box-shadow: 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px var(--shadow-color);
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────────────────── */
@@ -318,3 +324,53 @@ footer {
 /* ─── Misc ───────────────────────────────────────────────────────────────────── */
 
 .hidden { display: none !important; }
+
+/* ─── Dark Mode ──────────────────────────────────────────────────────────────── */
+
+[data-theme="dark"] {
+    --background: #1A1A1A;
+    --surface: #2A2A2A;
+    --text-primary: #F4F4F0;
+    --text-secondary: #A0A0A0;
+    --border-color: #F4F4F0;
+
+    --gray-100: #333333;
+    --gray-200: #3D3D3D;
+    --gray-300: #D1D5DB;
+    --gray-800: #E5E7EB;
+
+    --shadow-color: rgba(244, 244, 240, 0.3);
+    --card-shadow: 4px 4px 0px var(--shadow-color);
+}
+
+/* ─── Header Actions ─────────────────────────────────────────────────────────── */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ─── Theme Toggle Button ────────────────────────────────────────────────────── */
+
+.theme-toggle-btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--border-color);
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0px var(--shadow-color);
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+
+.theme-toggle-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px var(--shadow-color);
+}

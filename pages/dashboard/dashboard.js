@@ -290,9 +290,52 @@ function renderChart(data, title) {
     container.appendChild(svg);
 }
 
+// ─── Theme Management ─────────────────────────────────────────────────────────
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    var toggleBtn = document.getElementById('theme-toggle');
+    if (toggleBtn) {
+        toggleBtn.textContent = theme === 'dark' ? '\u263E' : '\u263C';
+    }
+}
+
+function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function initTheme() {
+    chrome.storage.local.get(['theme'], function(data) {
+        var theme = data.theme || getSystemTheme();
+        applyTheme(theme);
+    });
+
+    var toggleBtn = document.getElementById('theme-toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+            var current = document.documentElement.getAttribute('data-theme') || 'light';
+            var next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            chrome.storage.local.set({ theme: next });
+        });
+    }
+
+    // Follow OS changes if user hasn't explicitly set a preference
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        chrome.storage.local.get(['theme'], function(data) {
+            if (!data.theme) {
+                applyTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    });
+}
+
 // ─── Setup ────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', async function() {
+    // Initialise theme first to avoid flash
+    initTheme();
+
     try {
         await initDatabase();
     } catch (err) {

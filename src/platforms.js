@@ -46,7 +46,11 @@ const PLATFORM_REGISTRY = [
             {
                 id: 'notebooklm', name: 'NotebookLM', parentId: 'gemini',
                 icon: 'notebooklm.png',
-                match: function(h) { return h === 'notebooklm.google.com'; }
+                match: function(h, p) {
+                    if (h === 'notebooklm.google.com') return true;
+                    if (h === 'gemini.google.com' && p && p.startsWith('/notebook')) return true;
+                    return false;
+                }
             },
             {
                 id: 'veo', name: 'Veo', parentId: 'gemini',
