@@ -1,6 +1,6 @@
 # Promptify: Your AI usage, quantified.
 
-**Promptify** is a 100% local, privacy-first Chrome Extension that automatically tracks your active time across popular AI conversational platforms (ChatGPT, Claude, Gemini, and Perplexity).
+**Promptify** is a 100% local, privacy-first Chrome Extension that automatically tracks your active time across popular AI conversational platforms (ChatGPT, Claude, Gemini, Perplexity, Qwen, DeepSeek, Kimi, Copilot, Grok, and Google Labs).
 
 There are no servers, no telemetry, and no accounts required. All data is stored in your browser's local IndexedDB, keeping your usage data entirely in your hands.
 
@@ -14,6 +14,12 @@ Currently, the extension automatically tracks active tabs for:
 - **Claude** (`claude.ai`)
 - **Gemini** (`gemini.google.com`)
 - **Perplexity** (`perplexity.ai`)
+- **Qwen** (`chat.qwen.ai`, `qianwen.com`)
+- **DeepSeek** (`chat.deepseek.com`, `deepseek.com`)
+- **Kimi** (`kimi.ai`, `kimi.moonshot.cn`, `kimi.com`)
+- **Copilot** (`copilot.microsoft.com`, `copilot.cloud.microsoft.com`, `m365copilot.com`)
+- **Grok** (`grok.com`)
+- **Google Labs** (`labs.google`, `flow.google`, `notebook.google.com`, `aistudio.google.com`)
 
 ---
 
@@ -23,7 +29,7 @@ Since Promptify is currently in development and not on the Chrome Web Store, you
 
 1. **Clone or Download the Repository:**
    ```bash
-   git clone https://github.com/yourusername/promptify.git
+   git clone https://github.com/Horrid-12/promptify.git
    ```
    Or click **Code > Download ZIP** and extract it to a folder.
 
@@ -50,7 +56,7 @@ Promptify uses a highly optimized state machine running entirely in the browser:
 | Component | Responsibility |
 |-----------|----------------|
 | **Content Scripts** | Injected only on supported AI sites. Detects when the user is actively interacting (mouse moves, clicks, typing) or if the tab is visible. Sends heartbeat events. |
-| **Service Worker** | Runs in the background (`src/background.js`). Maintains the state of the active session. If it receives heartbeats, it accumulates time. If the tab is closed, hidden, or idle, it finalizes the session and saves it. |
+| **Service Worker** | Runs in the background (`src/background.js`, `src/platforms.js`, `src/db.js`). Maintains the state of the active session. If it receives heartbeats, it accumulates time. If the tab is closed, hidden, or idle, it finalizes the session and saves it. |
 | **IndexedDB** | The local database (`src/db.js`) where completed sessions are permanently stored. |
 | **Analytics Dashboard** | A fully local, Neo-Brutalist dashboard (`pages/dashboard/dashboard.html`) to visualize daily, weekly, and monthly usage. |
 
@@ -76,11 +82,14 @@ This means idle time is never counted, even if you leave an AI tab open in the b
 ```text
 Promptify/
 ├── manifest.json        # Extension configuration
+├── build.js             # Build script
+├── dist/                # Build output
 ├── src/                 # Core extension logic
 │   ├── background.js    # Service worker (session management)
 │   ├── content.js       # Content script (activity detection)
 │   ├── analytics.js     # Data aggregation functions
-│   └── db.js            # IndexedDB wrapper
+│   ├── db.js            # IndexedDB wrapper
+│   └── platforms.js     # Supported AI platform definitions
 ├── pages/               # UI Components
 │   ├── dashboard/       # Main analytics view
 │   └── popup/           # Extension popup view
