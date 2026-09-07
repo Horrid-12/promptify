@@ -46,7 +46,7 @@ const PLATFORM_REGISTRY = [
             {
                 id: 'notebooklm', name: 'NotebookLM', parentId: 'gemini',
                 icon: 'notebooklm.png',
-                match: function(h) { return h === 'notebooklm.google.com'; }
+                match: function(h) { return h === 'notebook.google.com'; }
             },
             {
                 id: 'veo', name: 'Veo', parentId: 'gemini',

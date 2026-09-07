@@ -37,7 +37,7 @@
     "https://www.grok.com/*",
     "https://labs.google/*",
     "https://flow.google/*",
-    "https://notebooklm.google.com/*",
+    "https://notebook.google.com/*",
     "https://aistudio.google.com/*"
   ],
   "background": {
@@ -74,7 +74,7 @@
         "https://www.grok.com/*",
         "https://labs.google/*",
         "https://flow.google/*",
-        "https://notebooklm.google.com/*",
+        "https://notebook.google.com/*",
         "https://aistudio.google.com/*"
       ],
       "js": ["src/content.js"],
