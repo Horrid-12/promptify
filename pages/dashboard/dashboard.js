@@ -357,6 +357,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     var exportBtn = document.getElementById('btn-export');
     if (exportBtn) exportBtn.addEventListener('click', handleExport);
+    var exportMdBtn = document.getElementById('btn-export-md');
+    if (exportMdBtn) exportMdBtn.addEventListener('click', handleExportMarkdown);
     var deleteBtn = document.getElementById('btn-delete');
     if (deleteBtn) deleteBtn.addEventListener('click', handleDeleteAll);
 });
@@ -364,15 +366,238 @@ document.addEventListener('DOMContentLoaded', async function() {
 async function handleExport() {
     try {
         var sessions = await getAllSessions();
-        var payload  = { version: 1, exportedAt: new Date().toISOString(), sessions: sessions };
+
+        // Sort sessions chronologically
+        sessions.sort(function(a, b) { return a.startTime - b.startTime; });
+
+        // ── Build summary ─────────────────────────────────────────────
+        var totalMs = 0;
+        var platformTotals = {};
+        var dailyTotals = {};
+
+        sessions.forEach(function(s) {
+            totalMs += s.duration;
+
+            // Platform aggregation
+            var name = (typeof getPlatformName === 'function') ? getPlatformName(s.site) : s.site;
+            if (!platformTotals[name]) {
+                platformTotals[name] = { sessions: 0, totalMs: 0 };
+            }
+            platformTotals[name].sessions += 1;
+            platformTotals[name].totalMs += s.duration;
+
+            // Daily aggregation
+            var dateKey = s.date || getLocalDateString(s.startTime);
+            if (!dailyTotals[dateKey]) {
+                dailyTotals[dateKey] = { sessions: 0, totalMs: 0 };
+            }
+            dailyTotals[dateKey].sessions += 1;
+            dailyTotals[dateKey].totalMs += s.duration;
+        });
+
+        // Format platform breakdown
+        var platformBreakdown = {};
+        Object.keys(platformTotals).sort(function(a, b) {
+            return platformTotals[b].totalMs - platformTotals[a].totalMs;
+        }).forEach(function(name) {
+            var p = platformTotals[name];
+            var pct = totalMs > 0 ? Math.round((p.totalMs / totalMs) * 100) : 0;
+            platformBreakdown[name] = {
+                totalTime: formatDuration(p.totalMs),
+                sessions: p.sessions,
+                percentage: pct + '%'
+            };
+        });
+
+        // Format daily breakdown (sorted by date)
+        var dailyBreakdown = {};
+        Object.keys(dailyTotals).sort().forEach(function(date) {
+            var d = dailyTotals[date];
+            // Add day-of-week label
+            var dayName = new Date(date + 'T12:00:00').toLocaleDateString(undefined, {
+                weekday: 'long', month: 'short', day: 'numeric', year: 'numeric'
+            });
+            dailyBreakdown[date] = {
+                day: dayName,
+                totalTime: formatDuration(d.totalMs),
+                sessions: d.sessions
+            };
+        });
+
+        // ── Build readable sessions grouped by date ───────────────────
+        var sessionsByDate = {};
+        sessions.forEach(function(s) {
+            var dateKey = s.date || getLocalDateString(s.startTime);
+            if (!sessionsByDate[dateKey]) {
+                sessionsByDate[dateKey] = [];
+            }
+
+            var startDate = new Date(s.startTime);
+            var endDate = new Date(s.endTime);
+
+            sessionsByDate[dateKey].push({
+                platform: (typeof getPlatformName === 'function') ? getPlatformName(s.site) : s.site,
+                startTime: startDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                endTime: endDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                duration: formatDuration(s.duration),
+                durationSeconds: Math.round(s.duration / 1000)
+            });
+        });
+
+        // ── Find date range ───────────────────────────────────────────
+        var firstDate = sessions.length > 0 ? (sessions[0].date || getLocalDateString(sessions[0].startTime)) : 'N/A';
+        var lastDate = sessions.length > 0 ? (sessions[sessions.length - 1].date || getLocalDateString(sessions[sessions.length - 1].startTime)) : 'N/A';
+
+        // ── Assemble final payload ────────────────────────────────────
+        var payload = {
+            _exportInfo: {
+                appName: 'Promptify',
+                version: 2,
+                exportedAt: new Date().toISOString(),
+                exportedAtReadable: new Date().toLocaleString(),
+                description: 'AI usage data exported from Promptify browser extension'
+            },
+            summary: {
+                dateRange: firstDate + ' to ' + lastDate,
+                totalTime: formatDuration(totalMs),
+                totalSessions: sessions.length,
+                platformBreakdown: platformBreakdown,
+                dailyBreakdown: dailyBreakdown
+            },
+            sessionsByDate: sessionsByDate,
+            _rawSessions: sessions
+        };
+
         var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
         var url  = URL.createObjectURL(blob);
         var a    = document.createElement('a');
         a.href     = url;
-        a.download = 'ai-tracker-export-' + getLocalDateString(Date.now()) + '.json';
+        a.download = 'promptify-export-' + getLocalDateString(Date.now()) + '.json';
         a.click();
         URL.revokeObjectURL(url);
         showToast('Export successful');
+    } catch (e) { /* ignore */ }
+}
+
+async function handleExportMarkdown() {
+    try {
+        var sessions = await getAllSessions();
+        sessions.sort(function(a, b) { return a.startTime - b.startTime; });
+
+        if (sessions.length === 0) {
+            showToast('No data to export');
+            return;
+        }
+
+        // ── Aggregate data ────────────────────────────────────────────
+        var totalMs = 0;
+        var platformTotals = {};
+        var dailyTotals = {};
+        var sessionsByDate = {};
+
+        sessions.forEach(function(s) {
+            totalMs += s.duration;
+            var name = (typeof getPlatformName === 'function') ? getPlatformName(s.site) : s.site;
+            var dateKey = s.date || getLocalDateString(s.startTime);
+
+            // Platform totals
+            if (!platformTotals[name]) platformTotals[name] = { sessions: 0, totalMs: 0 };
+            platformTotals[name].sessions += 1;
+            platformTotals[name].totalMs += s.duration;
+
+            // Daily totals
+            if (!dailyTotals[dateKey]) dailyTotals[dateKey] = { sessions: 0, totalMs: 0 };
+            dailyTotals[dateKey].sessions += 1;
+            dailyTotals[dateKey].totalMs += s.duration;
+
+            // Sessions grouped by date
+            if (!sessionsByDate[dateKey]) sessionsByDate[dateKey] = [];
+            sessionsByDate[dateKey].push({
+                platform: name,
+                start: new Date(s.startTime).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                end: new Date(s.endTime).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                duration: formatDuration(s.duration)
+            });
+        });
+
+        var firstDate = sessions[0].date || getLocalDateString(sessions[0].startTime);
+        var lastDate = sessions[sessions.length - 1].date || getLocalDateString(sessions[sessions.length - 1].startTime);
+
+        // ── Build Markdown ────────────────────────────────────────────
+        var md = '';
+        md += '# Promptify — Usage Report\n\n';
+        md += '> Exported on ' + new Date().toLocaleString() + '\n\n';
+
+        // Overview
+        md += '## Overview\n\n';
+        md += '| Metric | Value |\n';
+        md += '|--------|-------|\n';
+        md += '| Date Range | ' + firstDate + ' → ' + lastDate + ' |\n';
+        md += '| Total AI Time | **' + formatDuration(totalMs) + '** |\n';
+        md += '| Total Sessions | ' + sessions.length + ' |\n';
+        md += '| Avg. Session | ' + formatDuration(sessions.length > 0 ? totalMs / sessions.length : 0) + ' |\n\n';
+
+        // Platform Breakdown
+        md += '## Platform Breakdown\n\n';
+        md += '| Platform | Time | Sessions | Share |\n';
+        md += '|----------|------|----------|-------|\n';
+
+        var sortedPlatforms = Object.keys(platformTotals).sort(function(a, b) {
+            return platformTotals[b].totalMs - platformTotals[a].totalMs;
+        });
+
+        sortedPlatforms.forEach(function(name) {
+            var p = platformTotals[name];
+            var pct = totalMs > 0 ? Math.round((p.totalMs / totalMs) * 100) : 0;
+            md += '| ' + name + ' | ' + formatDuration(p.totalMs) + ' | ' + p.sessions + ' | ' + pct + '% |\n';
+        });
+        md += '\n';
+
+        // Daily Breakdown
+        md += '## Daily Breakdown\n\n';
+        md += '| Date | Day | Time | Sessions |\n';
+        md += '|------|-----|------|----------|\n';
+
+        Object.keys(dailyTotals).sort().forEach(function(date) {
+            var d = dailyTotals[date];
+            var dayName = new Date(date + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short' });
+            md += '| ' + date + ' | ' + dayName + ' | ' + formatDuration(d.totalMs) + ' | ' + d.sessions + ' |\n';
+        });
+        md += '\n';
+
+        // Detailed Sessions
+        md += '---\n\n';
+        md += '## Session Details\n\n';
+
+        Object.keys(sessionsByDate).sort().forEach(function(date) {
+            var dayLabel = new Date(date + 'T12:00:00').toLocaleDateString(undefined, {
+                weekday: 'long', month: 'short', day: 'numeric', year: 'numeric'
+            });
+            var dayMs = dailyTotals[date].totalMs;
+
+            md += '### ' + dayLabel + '  (' + formatDuration(dayMs) + ')\n\n';
+            md += '| # | Platform | Start | End | Duration |\n';
+            md += '|---|----------|-------|-----|----------|\n';
+
+            sessionsByDate[date].forEach(function(s, i) {
+                md += '| ' + (i + 1) + ' | ' + s.platform + ' | ' + s.start + ' | ' + s.end + ' | ' + s.duration + ' |\n';
+            });
+            md += '\n';
+        });
+
+        // Footer
+        md += '---\n\n';
+        md += '*Generated by [Promptify](https://github.com/user/promptify) — Your AI usage, quantified.*\n';
+
+        // ── Download ──────────────────────────────────────────────────
+        var blob = new Blob([md], { type: 'text/markdown' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'promptify-report-' + getLocalDateString(Date.now()) + '.md';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Markdown export successful');
     } catch (e) { /* ignore */ }
 }
 
