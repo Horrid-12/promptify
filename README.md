@@ -1,6 +1,6 @@
 # Promptify: Your AI usage, quantified.
 
-**Promptify** is a 100% local, privacy-first Chrome Extension that automatically tracks your active time across popular AI conversational platforms (ChatGPT, Claude, Gemini, Perplexity, Qwen, DeepSeek, Kimi, Copilot, Grok, and Google Labs).
+**Promptify** is a 100% local, privacy-first browser extension for Chrome and Firefox that automatically tracks your active time across popular AI conversational platforms (ChatGPT, Claude, Gemini, Perplexity, Qwen, DeepSeek, Kimi, Copilot, and Grok).
 
 There are no servers, no telemetry, and no accounts required. All data is stored in your browser's local IndexedDB, keeping your usage data entirely in your hands.
 
@@ -10,22 +10,23 @@ There are no servers, no telemetry, and no accounts required. All data is stored
 
 Currently, the extension automatically tracks active tabs for:
 
-- **ChatGPT** (`chatgpt.com`)
+- **ChatGPT** (`chatgpt.com`), including **Codex** (`chatgpt.com/codex`)
 - **Claude** (`claude.ai`)
-- **Gemini** (`gemini.google.com`)
+- **Gemini** (`gemini.google.com`), including **Flow** (`flow.google`), **NotebookLM** (`notebook.google.com`), and **Veo** (`aistudio.google.com/veo`)
 - **Perplexity** (`perplexity.ai`)
 - **Qwen** (`chat.qwen.ai`, `qianwen.com`)
 - **DeepSeek** (`chat.deepseek.com`, `deepseek.com`)
 - **Kimi** (`kimi.ai`, `kimi.moonshot.cn`, `kimi.com`)
-- **Copilot** (`copilot.microsoft.com`, `copilot.cloud.microsoft.com`, `m365copilot.com`)
+- **Copilot** (`copilot.microsoft.com`, `copilot.cloud.microsoft`, `m365copilot.com`, `m365.cloud.microsoft`)
 - **Grok** (`grok.com`)
-- **Google Labs** (`labs.google`, `flow.google`, `notebook.google.com`, `aistudio.google.com`)
 
 ---
 
 ## Local Installation (Unpacked Extension)
 
-Since Promptify is currently in development and not on the Chrome Web Store, you can install it directly from the source code:
+Since Promptify is currently in development and not published to a store, you can install it directly from the source code for Chrome and Firefox:
+
+### Chrome
 
 1. **Clone or Download the Repository:**
    ```bash
@@ -46,6 +47,12 @@ Since Promptify is currently in development and not on the Chrome Web Store, you
 
 5. **Ready!**
    - The Promptify extension icon will appear in your browser. Pin it to your toolbar for easy access to your stats.
+
+### Firefox
+
+1. **Build the extension:** run `node build.js` from the repo root to produce `dist/chrome` and `dist/firefox`.
+2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`.
+3. Click **Load Temporary Add-on** and select `firefox/manifest.json` from the build output.
 
 ---
 
@@ -82,8 +89,10 @@ This means idle time is never counted, even if you leave an AI tab open in the b
 ```text
 Promptify/
 ├── manifest.json        # Extension configuration
-├── build.js             # Build script
+├── build.js             # Build script (outputs Chrome + Firefox builds)
 ├── dist/                # Build output
+│   ├── chrome/          # Chrome build
+│   └── firefox/         # Firefox build
 ├── src/                 # Core extension logic
 │   ├── background.js    # Service worker (session management)
 │   ├── content.js       # Content script (activity detection)
