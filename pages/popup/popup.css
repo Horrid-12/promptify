@@ -19,7 +19,8 @@
 
     /* Layout & Shadows */
     --border-width: 3px;
-    --card-shadow: 4px 4px 0px #000000;
+    --shadow-color: #000000;
+    --card-shadow: 4px 4px 0px var(--shadow-color);
 }
 
 *, *::before, *::after {
@@ -64,39 +65,6 @@ h1 {
     font-size: 16px;
     text-transform: uppercase;
     letter-spacing: -0.5px;
-}
-
-.status-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    background: var(--gray-100);
-    color: var(--text-primary);
-    padding: 4px 10px;
-    font-weight: 600;
-    border: 2px solid var(--border-color);
-    text-transform: uppercase;
-    box-shadow: 2px 2px 0px #000;
-}
-
-/* ─── Pulse Indicator -> Live Dot ────────────────────────────────────────────── */
-
-.pulse-indicator {
-    width: 10px;
-    height: 10px;
-    background-color: var(--gray-300);
-    border-radius: 50%;
-    border: 1px solid var(--border-color);
-    display: inline-block;
-}
-
-.pulse-active {
-    background-color: var(--gray-800);
-    animation: none; /* Removed pulse animation for brutalist theme */
-}
-
-.pulse-idle {
-    background-color: var(--gray-300);
-    animation: none;
 }
 
 /* ─── Hero Stats ─────────────────────────────────────────────────────────────── */
@@ -165,7 +133,7 @@ h1 {
     background: var(--gray-100);
     border: 2px solid var(--border-color);
     padding: 6px 8px;
-    box-shadow: 2px 2px 0px #000;
+    box-shadow: 2px 2px 0px var(--shadow-color);
 }
 
 .platform-meta {
@@ -251,7 +219,7 @@ h1 {
     border: var(--border-width) solid var(--border-color);
     padding: 12px;
     text-align: center;
-    box-shadow: 2px 2px 0px #000;
+    box-shadow: 2px 2px 0px var(--shadow-color);
 }
 
 .metric-val {
@@ -287,7 +255,7 @@ h1 {
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
-    box-shadow: 4px 4px 0px #000;
+    box-shadow: 4px 4px 0px var(--shadow-color);
     transition: transform 0.1s, box-shadow 0.1s;
     margin-bottom: 16px;
 }
@@ -298,7 +266,7 @@ h1 {
 
 .dashboard-btn:active {
     transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px var(--shadow-color);
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────────────────── */
@@ -318,3 +286,45 @@ footer {
 /* ─── Misc ───────────────────────────────────────────────────────────────────── */
 
 .hidden { display: none !important; }
+
+/* ─── Dark Mode ──────────────────────────────────────────────────────────────── */
+
+[data-theme="dark"] {
+    --background: #1A1A1A;
+    --surface: #2A2A2A;
+    --text-primary: #F4F4F0;
+    --text-secondary: #A0A0A0;
+    --border-color: #F4F4F0;
+
+    --gray-100: #333333;
+    --gray-200: #3D3D3D;
+    --gray-300: #4A4A4A;
+    --gray-800: #E5E7EB;
+
+    --shadow-color: rgba(244, 244, 240, 0.3);
+    --card-shadow: 4px 4px 0px var(--shadow-color);
+}
+
+/* ─── Theme Toggle Button ────────────────────────────────────────────────────── */
+
+.theme-toggle-btn {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--border-color);
+    background: var(--surface);
+    color: var(--text-primary);
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0px var(--shadow-color);
+    transition: transform 0.1s, box-shadow 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+}
+
+.theme-toggle-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px var(--shadow-color);
+}
