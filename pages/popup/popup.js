@@ -133,6 +133,7 @@ function initTheme() {
         });
     }
 
+// Follow OS changes if user hasn't explicitly set a preference
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
         chrome.storage.local.get(['theme'], function(data) {
             if (!data.theme) {
@@ -145,6 +146,7 @@ function initTheme() {
 // ─── Initialise ───────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function() {
+// Initialise theme first to avoid flash
     initTheme();
 
     // Open/verify IndexedDB connection, then start polling.

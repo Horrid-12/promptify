@@ -284,13 +284,7 @@ h1, h2, h3, h4, h5, h6 {
     gap: 8px;
 }
 
-.platform-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-}
-
-.platform-name {
+.platform-icon-lg {
     font-family: 'Archivo Black', sans-serif;
     font-size: 18px;
     text-transform: uppercase;
@@ -369,30 +363,12 @@ h1, h2, h3, h4, h5, h6 {
 /* ─── Footer & Data Management ───────────────────────────────────────────────── */
 .app-footer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 24px;
-    background: var(--surface);
-    border: var(--border-width) solid var(--border-color);
-    box-shadow: var(--card-shadow);
+    justify-content: center;
 }
 
-.footer-note {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.data-management {
-    display: flex;
-    gap: 12px;
-}
-
-.btn {
-    padding: 10px 20px;
-    border: var(--border-width) solid var(--border-color);
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
+.platform-icon-md {
+    font-family: 'Archivo Black', sans-serif;
     font-size: 14px;
     text-transform: uppercase;
     cursor: pointer;
