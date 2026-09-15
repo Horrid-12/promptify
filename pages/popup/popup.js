@@ -6,30 +6,7 @@
  * platforms.js, db.js and analytics.js are loaded before this script in popup.html.
  */
 
-// Must match analytics.js and background.js
-var INACTIVITY_TIMEOUT_MS_POPUP = 300000; // 5 minutes
-
 var ICON_BASE_PATH = '../../assets/icons/';
-
-// ─── Header Status ────────────────────────────────────────────────────────────
-
-function updateHeaderStatus(active, isInactive) {
-    var statusTextEl = document.getElementById('tracker-status-text');
-    var indicatorEl  = document.querySelector('.pulse-indicator');
-    if (!indicatorEl || !statusTextEl) return;
-
-    indicatorEl.className = 'pulse-indicator';
-
-    if (active && !isInactive) {
-        statusTextEl.textContent = 'Tracking';
-        indicatorEl.classList.add('pulse-active');
-    } else if (active && isInactive) {
-        statusTextEl.textContent = 'Inactive';
-        indicatorEl.classList.add('pulse-idle');
-    } else {
-        statusTextEl.textContent = 'Idle';
-    }
-}
 
 // ─── Platform Row Builder ─────────────────────────────────────────────────────
 
@@ -101,10 +78,6 @@ async function updatePopupStats() {
             chrome.storage.local.get(['activeSessionState'], resolve);
         });
         var active = data.activeSessionState || null;
-        var isInactive = active &&
-            (Date.now() - active.lastActivity >= INACTIVITY_TIMEOUT_MS_POPUP);
-
-        updateHeaderStatus(active, isInactive);
 
         // Pull today's stats from IndexedDB via analytics.js
         var stats = await getTodayStats(active);
@@ -160,7 +133,7 @@ function initTheme() {
         });
     }
 
-    // Follow OS changes if user hasn't explicitly set a preference
+// Follow OS changes if user hasn't explicitly set a preference
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
         chrome.storage.local.get(['theme'], function(data) {
             if (!data.theme) {
@@ -173,7 +146,7 @@ function initTheme() {
 // ─── Initialise ───────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialise theme first to avoid flash
+// Initialise theme first to avoid flash
     initTheme();
 
     // Open/verify IndexedDB connection, then start polling.

@@ -33,7 +33,11 @@ function copyRecursiveSync(src, dest) {
 
 // Clean dist directory
 if (fs.existsSync(distDir)) {
-    fs.rmSync(distDir, { recursive: true, force: true });
+    try {
+        fs.rmSync(distDir, { recursive: true, force: true });
+    } catch (e) {
+        console.warn('Warning: Could not completely remove dist directory. Proceeding with overwrite...', e.message);
+    }
 }
 
 fs.mkdirSync(chromeDir, { recursive: true });
