@@ -62,10 +62,15 @@ function getDateDaysAgo(daysBack) {
 
 /**
  * Formats a duration (ms) into a human-readable string.
- * Examples: "2h 5m", "45m", "0m"
+ * Sub-minute values are shown in seconds so short averages don't floor to 0.
+ * Examples: "2h 5m", "45m", "14s", "0m"
  */
 function formatDuration(ms) {
     if (!ms || ms < 0) ms = 0;
+    const totalSeconds = Math.floor(ms / 1000);
+    if (totalSeconds < 60) {
+        return totalSeconds > 0 ? `${totalSeconds}s` : '0m';
+    }
     const totalMinutes = Math.floor(ms / 60000);
     const hours   = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
